@@ -1,7 +1,7 @@
 /* eslint-env node, mocha */
 
 const assert = require('chai').assert;
-const libunqfy = require('./modelo/unqfy');
+const libunqfy = require('./modelo.unqfy.js');
 
 
 function createAndAddArtist(unqfy, artistName, country) {

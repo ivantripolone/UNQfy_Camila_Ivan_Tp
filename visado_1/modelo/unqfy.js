@@ -2,14 +2,18 @@
 const picklify = require('picklify'); // para cargar/guardar unqfy
 const fs = require('fs'); // para cargar/guarfar unqfy
 
-const artist = require('./artist')
+const artist = require('./artist.js');
+const album = require('./album.js');
+const artistExistError= require('./errores/ArtistAlreadyExistError.js');
+const artistDoesNotExistError=require('./errores/ArtistDoesNotExistError.js');
+const albumDoesNotExistError= require('./errores/AlbumDoesNotExistError.js');
 
- class UNQfy {
-constructor(){
-  this._artists= []
-  this.playlists= []
+class UNQfy {
+  constructor(){
+    this._artists= [];
+    this.playlists= [];
  
-}
+  }
   // artistData: objeto JS con los datos necesarios para crear un artista
   //   artistData.name (string)
   //   artistData.country (string)
@@ -21,13 +25,13 @@ constructor(){
     - una propiedad country (string)
   */
  
- if((this._artists.filter(artist=>artist.name===artistData.name)).length>0){
-   throw new ArtistAlreadyExistsError;
- }
- else{
- artist= new Artist(artistData.name,artistData.country)
-this._artists.push(artist)
-return artist
+    if((this._artists.filter(artist=>artist.name===artistData.name)).length>0){
+      throw new artistExistError;
+    }
+    else{
+      const newArtist= new artist(artistData.name,artistData.country);
+      this._artists.push(newArtist);
+      return artist;
 
     }
 
@@ -44,14 +48,14 @@ return artist
      - una propiedad name (string)
      - una propiedad year (number)
   */
- album = new Album (albumData.name, albumData.year)
- try {this.getArtistById(artistId).addAlbum(album)
-  return album
-  }
- catch(e){
- console.log("this album cannot be added because"+e.message)
-}
-  return albumData}
+    const newAlbum = new album (albumData.name, albumData.year);
+    try {this.getArtistById(artistId).addAlbum(newAlbum);
+      return newAlbum;
+    }
+    catch(e){
+      console.log('this album cannot be added because'+e.message);
+    }
+    return albumData;}
   
 
 
@@ -71,23 +75,24 @@ return artist
 
   getArtistById(id) {
     if((this.artists.find(artist=> artist.id===id) === undefined )){
-      throw new ArtistDoesNotExistError
+      throw new artistDoesNotExistError;
     }
     else{
-   return (this.artists.find(artist=> artist.id===id))}
+      return (this.artists.find(artist=> artist.id===id));}
   }
 
   getAlbumById(id) {
-    album = undefined
-    i=0
+    let album = undefined;
+    let i=0;
     while(album===undefined&&i<this.artists.length){
-    album = this.artists[i].find(this.artists[i]===id)
-  }
-  if(album!=undefined){
-return album
-  } else{
-    throw new AlbumDoesNotExistError
-  }
+      album = this.artists[i].find(this.artists[i]===id);
+      i++;
+    }
+    if(album!==undefined){
+      return album;
+    } else{
+      throw new albumDoesNotExistError;
+    }
   }
 
   getTrackById(id) {

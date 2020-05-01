@@ -1,3 +1,6 @@
+const albumAlreadyExistsError= require('./errores/AlbumAlreadyExistsError');
+const albumDoesNotExistError= require('./errores/AlbumDoesNotExistError');
+
 
 module.exports= class Artist{
 
@@ -19,7 +22,20 @@ module.exports= class Artist{
   }
 
   addAlbum(album){
-    this._albums.push(album);
+    if(this.albums.find(a=>a===album)===undefined){
+      this._albums.push(album);}
+    else{
+      throw albumAlreadyExistsError;
+    }
+  }
+
+  removeAlbum(album){
+    if(this.albums.find(a=>a===album)!==undefined){
+      this.albums.pop(album);
+    }
+    else{
+      throw albumDoesNotExistError;
+    }
   }
 
   get albums(){
@@ -28,4 +44,3 @@ module.exports= class Artist{
 
 
 };
-

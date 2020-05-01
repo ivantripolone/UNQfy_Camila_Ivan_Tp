@@ -6,5 +6,12 @@ module.exports= class album{
     this._year=year;
   }
 
-    
+  get id(){
+    return this._id;
+  }
+  get name(){
+    return this._name;
+  }
+
+  
 };
