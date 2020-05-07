@@ -46,9 +46,28 @@ function saveUNQfy(unqfy, filename = 'data.json') {
 
 */
 
+function addArtist(artistName, country){
+  const artistData= { name: artistName,country: country };
+  const unqfy= getUNQfy();
+  const artist=unqfy.addArtist(artistData);
+  console.log(artist);
+  
+  saveUNQfy(unqfy);
+}
+function getArtist(){
+  const unqfy= getUNQfy();
+  console.log(unqfy._artists);
+  saveUNQfy(unqfy);
+}
+
 function main() {
+  
   console.log('arguments: ');
-  process.argv.forEach(argument => console.log(argument));
+  if(process.argv[2]=== 'addArtist')
+    addArtist(process.argv[3],process.argv[4]);
+  if(process.argv[2]=== 'getArtist')
+    getArtist();
+  //process.argv.forEach(argument => console.log(argument));
     
 }
 

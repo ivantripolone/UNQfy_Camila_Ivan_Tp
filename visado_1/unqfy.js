@@ -214,6 +214,11 @@ class UNQfy {
       return this.playlists.find(p=> p.id === newPlayList.id);
     }
   }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+searchByName('Roses'){
+  
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   save(filename) {
@@ -229,13 +234,16 @@ class UNQfy {
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy];
+    const classes = [UNQfy,artist , album , track , playList , artistExistError , artistDoesNotExistError , albumDoesNotExistError,
+      trackDoesNotExistError , playlistDoesNotExistError , playListAlreadyExistsError];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 }
 
 // COMPLETAR POR EL ALUMNO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente
 module.exports = {
-  UNQfy,
+  UNQfy/*, artist , album , track , playList , artistExistError , artistDoesNotExistError , albumDoesNotExistError,
+  trackDoesNotExistError , playlistDoesNotExistError , playListAlreadyExistsError
+  */
 };
 
