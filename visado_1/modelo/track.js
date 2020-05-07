@@ -12,7 +12,7 @@ module.exports = class Track {
       get name() {
         return this._name;
       }
-      get duration(){
+      getduration(){
           return this._duration;
       }
       get genres(){
