@@ -1,39 +1,45 @@
 
 const picklify = require('picklify'); // para cargar/guarfar unqfy
 const fs = require('fs'); // para cargar/guarfar unqfy
-const artist = require("./clases/Artist.js");
-const album = require("./clases/Album.js");
-const track = require("./clases/Track.js");
-const playList = require("./clases/PlayList.js");
+const artist = require("./modelo/artist.js");
+const album = require("./modelo/album.js");
+const track = require("./modelo/track.js");
+const playList=require("./modelo/playlist");
+const artistExistError = require('./modelo/errores/ArtistAlreadyExistsError');
+const artistDoesNotExistError =require("./modelo/errores/ArtistDoesNotExistError.js");
+const albumDoesNotExistError = require("./modelo/errores/AlbumDoesNotExistError.js");
+const trackDoesNotExistError = require("./modelo/errores/trackDoesNotExistError.js");
+const playlistDoesNotExistError = require("./modelo/errores/playlistDoesNotExistError");
+const playListAlreadyExistsError = require("./modelo/errores/PlayListAlreadyExistsError");
 
 class UNQfy {
+
   constructor(){
-    this.artists = [];
-    this.playLists= [];
-    this.albums= [];
-    this.tracks= [];
+    this._artists= [];
+    this.playlists= [];
   }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // artistData: objeto JS con los datos necesarios para crear un artista
   //   artistData.name (string)
   //   artistData.country (string)
   // retorna: el nuevo artista creado
-  addArtist(artistData){
-  /* Crea un artista y lo agrega a unqfy.
-  El objeto artista creado debe soportar (al menos):
-    - una propiedad name (string)
-    - una propiedad country (string)
-  */
-    const newArtist = new artist(artistData.name, artistData.country);
-    if (this.artists.find(a => a.name === newArtist.name && a.country === newArtist.country)) {
-    //throw new Error;
-    } else {
-      this.artists.push(newArtist);
-      return this.artists.find(a=> a.id === newArtist.id);
+  addArtist(artistData) {
+    /* Crea un artista y lo agrega a unqfy.qqqq
+    El objeto artista creado debe soportar (al menos):
+      - una propiedad name (string)
+      - una propiedad country (string)
+    */
+    if (this._artists.find(artist => artist._name === artistData.name))
+    {
+      throw new artistExistError;
+    }
+    else {
+      const newArtist = new artist(artistData.name, artistData.country,this._artists.length+1); 
+      this._artists.push(newArtist);
+      return this._artists.find(artist => artist._id === newArtist._id);
     }
   }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // albumData: objeto JS con los datos necesarios para crear un album
   //   albumData.name (string)
   //   albumData.year (number)
@@ -44,17 +50,16 @@ class UNQfy {
      - una propiedad name (string)
      - una propiedad year (number)
   */
-    const artist= this.getArtistById(artistId);
-    const newAlbum= new album(artist.id,albumData.name, albumData.year)
-    if(this.albums.find(a => a.name === newAlbum.name && a.artistId === newAlbum.artistId)){
-      //throw new Error;
-    }else {
-      this.albums.push(newAlbum);
-      return this.albums.find(a=> a.id === newAlbum.id);
+    const newAlbum = new album (albumData.name, albumData.year,this.getAlbums().length +1);
+    try {this.getArtistById(artistId).addAlbum(newAlbum);
+      return this.getAlbumById(newAlbum._id);
     }
+    catch(e){
+      console.log('this album cannot be added because'+e.message);
+    }
+  
   }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // trackData: objeto JS con los datos necesarios para crear un track
   //   trackData.name (string)
   //   trackData.duration (number)
@@ -67,61 +72,82 @@ class UNQfy {
       - una propiedad duration (number),
       - una propiedad genres (lista de strings)
   */
-    const album = this.getAlbumById(albumId);
-    const newTrack= new track(album.id,trackData.name,trackData.duration, trackData.genres);
-    if(this.tracks.find(t => t.albumId === newTrack.albumId && t.name === newTrack.name)){
-      //throw new Error;
-    }else{
-      this.tracks.push(newTrack);
-      return this.tracks.find(a=> a.id === newTrack.id);
-    }
-  }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  getArtistById(id) {
-    const artist= this.artists.find(a=> a.id === id);
-    if(artist){
-      return artist;
-    }else{
-      //return new Error;
+    const newTrack = new track(trackData.name, trackData.duration, trackData.genres, this.getTracks().length +1);
+    try {
+      return this.getAlbumById(albumId).addtrack(newTrack);
     }
+    catch(e){
+      console.log('this album cannot be added because'+e.message);
+    } 
+    
   }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   getAlbumById(id) {
-
-    const album= this.albums.find(a=> a.id === id);
-    if(album){
-      return album
-    }else{
-      //return new Error;
+    const album = this.getAlbums().find(album => album.id === id);
+    if(album !== undefined){
+      return album;
+    } else{
+      throw new albumDoesNotExistError;
     }
   }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  getTrackById(id) {
-    const track= this.albums.find( t=> t.id === id);
-    if(track){
-      return track
-    }else{
-      //return new Error;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  getArtistById(id) {
+    if((this._artists.find(artist=> artist.id===id) === undefined )){
+      throw new artistDoesNotExistError;
     }
+    else{
+      return (this._artists.find(artist => artist.id === id));
+    }
+  }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  getArtist(){
+    return this._artists;
+  }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  getAlbums(){
+    return this._artists.reduce((total,amount)=> {
+      amount.albums.forEach( album => {
+        total.push(album);
+      })
+      return total;
+    }, []);  
   }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  getPlaylistById(id) {
-    const playlist= this.playLists.find( p=> p.id === id);
-    if(playlist){
-      return playlist;
-    }else{
-      //return new Error;
+  getTracks(){
+    return this.getAlbums().reduce((total,amount)=> {
+      amount._tracks.forEach( track => {
+        total.push(track);
+      })
+      return total;
+    }, []);
+  }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  getTrackById(id) {
+    const track = this.getTracks().find(track => track.id === id);
+    if(track !== undefined){
+      return track;
+    } else{
+      throw new trackDoesNotExistError;
     }
   }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  getPlaylistById(id) {
+    if((this.playlists.find(playlist=> playlist.id===id) === undefined )){
+      throw new playlistDoesNotExistError;
+    }
+    else{
+      return (this.playlists.find(playlist => playlist.id === id));
+    }
+
+
+  }
 
   // genres: array de generos(strings)
   // retorna: los tracks que contenga alguno de los generos en el parametro genres
   getTracksMatchingGenres(genres) {
-    return this.tracks.filter( t=>this.containsTrack(t,genres));
+
+    return this.getTracks().filter( t =>this.containsTrack(t,genres));
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -134,27 +160,38 @@ class UNQfy {
     }
     return false;
   }
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  myAlbumsById(idArtist){
+    const albums =this.getArtistById(idArtist)._albums;
+    return albums;
+  }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+ myTracksById(idArtist){
+    return this.myAlbumsById(idArtist).reduce((total,amount)=> {
+      amount._tracks.forEach( track => {
+        total.push(track);
+      })
+      return total;
+    }, []);
+  }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // artistName: nombre de artista(string)
   // retorna: los tracks interpredatos por el artista con nombre artistName
   getTracksMatchingArtist(artistName) {
-    const artist= this.artists.find(a=> a.name === artistName.name);
+    const artist= this._artists.find(a=> a.name === artistName.name);
     if(artist){
-      const albums= this.albums.filter(a=> a.artistId === artist.id);
-      return this.tracks.filter(t=>this.isMyTracks(t,albums));
-    }else return [];
+      return this.myTracksById(artist.id);
+    }else  throw new artistDoesNotExistError;
   }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  isMyTracks(track,albums){
-    for (let i = 0; i < albums.length; i++) {
-      if(albums[i].id === track.albumId){
-        return true;
-      } 
-    }
-    return false;
-  }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
   // name: nombre de la playlist
   // genresToInclude: array de generos
@@ -167,25 +204,18 @@ class UNQfy {
       * un metodo duration() que retorne la duración de la playlist.
       * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist.
   */
-
-    const newPlayList = new playList(name,genresToInclude,maxDuration);
-    if (this.playLists.find(p => p.name === newPlayList.name)) {
-      //throw new Error;
-    } else {
+    const newPlayList = new playList(name,genresToInclude,maxDuration,this.playlists.length +1);
+    if (this.playlists.find(p => p.name === newPlayList.name)) {
+      throw new playListAlreadyExistsError;
+    }else {
       const tracksByGenre = this.getTracksMatchingGenres(genresToInclude);      
       newPlayList.addTracks(tracksByGenre);
-      this.playLists.push(newPlayList);
-      return this.playLists.find(p=> p.id === newPlayList.id);
+      this.playlists.push(newPlayList);
+      return this.playlists.find(p=> p.id === newPlayList.id);
     }
   }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  searchByName(name) {
-    return this.playLists.find(
-      function (playList) {
-        return playList.name.toLowerCase().indexOf(name.toLowerCase()) > -1;
-      })
-  }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   save(filename) {
     const listenersBkp = this.listeners;
     this.listeners = [];

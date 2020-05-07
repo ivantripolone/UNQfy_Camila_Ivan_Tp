@@ -5,7 +5,7 @@ const libunqfy = require('./unqfy');
 
 
 function createAndAddArtist(unqfy, artistName, country) {
-  const artist = unqfy.addArtist({ name: artistName, country });
+  const artist = unqfy.addArtist({ name: artistName,country: country });
   return artist;
 }
 
@@ -28,29 +28,37 @@ describe('Add, remove and filter data', () => {
   it('should add an artist', () => {
     const artist = createAndAddArtist(unqfy, 'Guns n\' Roses', 'USA');
 
-    assert.equal(artist.name, 'Guns n\' Roses');
-    assert.equal(artist.country, 'USA');
+    assert.equal(artist._name, 'Guns n\' Roses');
+    assert.equal(artist._country, 'USA');
+    assert.equal(artist._id, '1');
 
   });
+  
+
 
   it('should add an album to an artist', () => {
     const artist = createAndAddArtist(unqfy, 'Guns n\' Roses', 'USA');
-    const album = createAndAddAlbum(unqfy, artist.id, 'Appetite for Destruction', 1987);
+    const album = createAndAddAlbum(unqfy, artist._id, 'Appetite for Destruction', 1987);
 
-    assert.equal(album.name, 'Appetite for Destruction');
-    assert.equal(album.year, 1987);
+    assert.equal(album._name, 'Appetite for Destruction');
+    assert.equal(album._year, 1987);
+    
+    
   });
 
   it('should add a track to an album', () => {
     const artist = createAndAddArtist(unqfy, 'Guns n\' Roses', 'USA');
-    const album = createAndAddAlbum(unqfy, artist.id, 'Appetite for Destruction', 1987);
-    const track = createAndAddTrack(unqfy, album.id, 'Welcome to the jungle', 200, ['rock', 'hard rock']);
+    const album = createAndAddAlbum(unqfy, artist._id, 'Appetite for Destruction', 1987);
+    const track = createAndAddTrack(unqfy, album._id, 'Welcome to the jungle', 200, ['rock', 'hard rock']);
 
-    assert.equal(track.name, 'Welcome to the jungle');
-    assert.strictEqual(track.duration, 200);
-    assert.equal(track.genres.includes('rock'), true);
-    assert.equal(track.genres.includes('hard rock'), true);
-    assert.lengthOf(track.genres, 2);
+    assert.equal(artist._id, '1');
+    assert.equal(track._name, 'Welcome to the jungle');
+    assert.strictEqual(track._duration, 200);
+    assert.equal(track._genres.includes('rock'), true);
+    assert.equal(track._genres.includes('hard rock'), true);
+    assert.lengthOf(track._genres, 2);
+    assert.lengthOf(unqfy.getTracks()[0].genres, 2);
+    
   });
 
   it('should find different things by name', () => {
