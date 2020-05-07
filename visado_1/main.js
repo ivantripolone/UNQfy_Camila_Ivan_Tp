@@ -49,8 +49,8 @@ function saveUNQfy(unqfy, filename = 'data.json') {
 function addArtist(artistName, country){
   const artistData= { name: artistName,country: country };
   const unqfy= getUNQfy();
-  const artist=unqfy.addArtist(artistData);
-  console.log(artist);
+  
+  console.log(unqfy.addArtist(artistData));
   
   saveUNQfy(unqfy);
 }
