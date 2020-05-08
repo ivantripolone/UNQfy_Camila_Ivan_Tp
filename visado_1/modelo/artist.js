@@ -21,27 +21,30 @@ module.exports= class Artist{
   }
 
   get country(){
-    return this.country;
+    return this._country;
   }
   get albums(){
     return this._albums;
   }
 
   addAlbum(album){
-    if(this.albums.find(a=>a===album)===undefined){
-      this._albums.push(album);
+    if(this.albums.find(a=>a.name === album.name)){
+      throw new albumAlreadyExistsError;
     }
     else{
-      throw albumAlreadyExistsError;
+      this._albums.push(album);
     }
   }
 
-  removeAlbum(album){
-    if(this.albums.find(a=>a===album)!==undefined){
-      this.albums.pop(album);
+  removeAlbum(nameAlbum){
+    const myAlbum =this.albums.find(a=>a.name === nameAlbum);
+    if(myAlbum){
+      const index= this.albums.indexOf(myAlbum);
+      this.albums.splice(index , 1);
+      return myAlbum;   
     }
     else{
-      throw albumDoesNotExistError;
+      throw new albumDoesNotExistError;
     }
   }
 };
