@@ -56,17 +56,60 @@ function addArtist(artistName, country){
 }
 function getArtist(){
   const unqfy= getUNQfy();
-  console.log(unqfy._artists);
+  console.log(unqfy.getArtist());
+  saveUNQfy(unqfy);
+}
+function addAlbum(artistId,nameAlbum,yearAlbum){
+  const albumData = {name: nameAlbum , year: parseInt(yearAlbum,10) };
+  const unqfy = getUNQfy();
+  console.log(unqfy.addAlbum(parseInt(artistId,10),albumData));
+  saveUNQfy(unqfy);
+}
+function removeAlbum(artistId,nameAlbum){
+  const unqfy = getUNQfy();
+  console.log(unqfy.removeAlbum(parseInt(artistId,10),nameAlbum));
+  saveUNQfy(unqfy);
+}
+function getAlbums(){
+  const unqfy= getUNQfy();
+  console.log(unqfy.getAlbums());
+  saveUNQfy(unqfy);
+}
+function addTrack(albumId,trackName, trackDuraction, trackGenres){
+  const trackData = { name: trackName, duration: parseInt(trackDuraction,10), genres: trackGenres.split(" ") };
+  const unqfy = getUNQfy();
+  console.log(unqfy.addTrack(parseInt(albumId,10),trackData));
+  saveUNQfy(unqfy);
+}
+function removeTrack(albumId,nameTrack){
+  const unqfy = getUNQfy();
+  console.log(unqfy.removeTrack(parseInt( albumId ,10),nameTrack));
+  saveUNQfy(unqfy);
+}
+function getTracks(){
+  const unqfy= getUNQfy();
+  console.log(unqfy.getTracks());
   saveUNQfy(unqfy);
 }
 
 function main() {
-  
-  console.log('arguments: ');
+ 
   if(process.argv[2]=== 'addArtist')
     addArtist(process.argv[3],process.argv[4]);
-  if(process.argv[2]=== 'getArtist')
+  if(process.argv[2]=== 'getArtists')
     getArtist();
+  if(process.argv[2]=== 'addAlbum')
+    addAlbum(process.argv[3],process.argv[4],process.argv[5]);
+  if(process.argv[2]=== 'removeAlbum')
+    removeAlbum(process.argv[3],process.argv[4]);
+  if(process.argv[2]=== 'getAlbums')
+    getAlbums();
+  if(process.argv[2]=== 'addTrack')
+    addTrack(process.argv[3],process.argv[4],process.argv[5],process.argv[6]);
+  if(process.argv[2]=== 'removeTrack')
+    removeTrack(process.argv[3],process.argv[4]);
+    if(process.argv[2]=== 'getTracks')
+    getTracks();
   //process.argv.forEach(argument => console.log(argument));
     
 }

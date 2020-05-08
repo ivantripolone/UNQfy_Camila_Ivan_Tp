@@ -28,9 +28,9 @@ describe('Add, remove and filter data', () => {
   it('should add an artist', () => {
     const artist = createAndAddArtist(unqfy, 'Guns n\' Roses', 'USA');
 
-    assert.equal(artist._name, 'Guns n\' Roses');
-    assert.equal(artist._country, 'USA');
-    assert.equal(artist._id, '1');
+    assert.equal(artist.name, 'Guns n\' Roses');
+    assert.equal(artist.country, 'USA');
+    assert.equal(artist.id, '1');
 
   });
   
@@ -38,7 +38,7 @@ describe('Add, remove and filter data', () => {
 
   it('should add an album to an artist', () => {
     const artist = createAndAddArtist(unqfy, 'Guns n\' Roses', 'USA');
-    const album = createAndAddAlbum(unqfy, artist._id, 'Appetite for Destruction', 1987);
+    const album = createAndAddAlbum(unqfy, artist.id, 'Appetite for Destruction', 1987);
 
     assert.equal(album._name, 'Appetite for Destruction');
     assert.equal(album._year, 1987);
@@ -48,15 +48,15 @@ describe('Add, remove and filter data', () => {
 
   it('should add a track to an album', () => {
     const artist = createAndAddArtist(unqfy, 'Guns n\' Roses', 'USA');
-    const album = createAndAddAlbum(unqfy, artist._id, 'Appetite for Destruction', 1987);
-    const track = createAndAddTrack(unqfy, album._id, 'Welcome to the jungle', 200, ['rock', 'hard rock']);
+    const album = createAndAddAlbum(unqfy, artist.id, 'Appetite for Destruction', 1987);
+    const track = createAndAddTrack(unqfy, album.id, 'Welcome to the jungle', 200, ['rock', 'hard rock']);
 
-    assert.equal(artist._id, '1');
-    assert.equal(track._name, 'Welcome to the jungle');
-    assert.strictEqual(track._duration, 200);
-    assert.equal(track._genres.includes('rock'), true);
-    assert.equal(track._genres.includes('hard rock'), true);
-    assert.lengthOf(track._genres, 2);
+    assert.equal(artist.id, '1');
+    assert.equal(track.name, 'Welcome to the jungle');
+    assert.strictEqual(track.duration, 200);
+    assert.equal(track.genres.includes('rock'), true);
+    assert.equal(track.genres.includes('hard rock'), true);
+    assert.lengthOf(track.genres, 2);
     assert.lengthOf(unqfy.getTracks()[0].genres, 2);
     
   });
@@ -145,7 +145,7 @@ describe('Playlist Creation and properties', () => {
 
     const playlist = unqfy.createPlaylist('my playlist', ['pop', 'rock'], 1400);
 
-    assert.equal(playlist.name, 'my playlist');
+    assert.equal(unqfy.searchPlayListByName('my')[0].name, 'my playlist');
     assert.isAtMost(playlist.duration(), 1400);
     assert.isTrue(playlist.hasTrack(t1));
     assert.isTrue(playlist.hasTrack(t2));

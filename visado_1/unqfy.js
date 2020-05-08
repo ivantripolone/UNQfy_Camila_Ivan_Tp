@@ -59,6 +59,15 @@ class UNQfy {
     }
   
   }
+
+  removeAlbum(artistId, nameAlbum){
+    try {
+      return this.getArtistById(artistId).removeAlbum(nameAlbum); 
+    }
+    catch(e){
+      console.log('this album cannot be added because'+e.message);
+    }
+  }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // trackData: objeto JS con los datos necesarios para crear un track
   //   trackData.name (string)
@@ -81,6 +90,14 @@ class UNQfy {
       console.log('this album cannot be added because'+e.message);
     } 
     
+  }
+  removeTrack(albumId, nameTrack){
+    try {
+      return this.getAlbumById(albumId).removeTrack(nameTrack); 
+    }
+    catch(e){
+      console.log('this album cannot be added because'+e.message);
+    }
   }
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   getAlbumById(id) {
