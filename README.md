@@ -20,6 +20,10 @@ node main.js removeTrack albumId "nameTrack" : elimina un track de un album.
 node main.js getTrack : Retorna todos los track de UNQfy
 
 
+
+Comando de Prueba.
+
+
 node main.js addArtist "Damas Gratis" Argentina
 
 node main.js addArtist "Bad bony" "Puerto Rico"
