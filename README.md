@@ -4,19 +4,20 @@
 Comandos desde la CLI:
 
 node main.js addArtist "nameArtist" "countryArtist":Agrega un nuevo artista a UNQfy y retorna el artista.
+
 node main.js getArtist : Retorna todos los artistas de UNQfy.
+
 node main.js addAlbum artistId "nameAlbum" yearAlbum : Agrega un nuevo Album al artista y retorna el album.
+
 node main.js getAlbums : Retorna todos los Albums de UNQfy.
+
 node main.js removeAlbum "artistId" "nameAlbum" : elimina un album de un artista.
+
 node main.js addTrack albumId "trackName" trackDuraction "trackGenres" : Agrega el track al album y retorna el track
+
 node main.js removeTrack albumId "nameTrack" : elimina un track de un album.
+
 node main.js getTrack : Retorna todos los track de UNQfy
-
-
-
-
-
-
 
 
 node main.js addArtist "Damas Gratis" Argentina
