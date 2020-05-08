@@ -21,7 +21,7 @@ node main.js getTrack : Retorna todos los track de UNQfy
 
 
 
-Comando de Prueba.
+Comando de Prueba:
 
 
 node main.js addArtist "Damas Gratis" Argentina
