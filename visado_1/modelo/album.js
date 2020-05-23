@@ -36,8 +36,7 @@ module.exports = class Album {
     if(myTrack){
       const index= this.tracks.indexOf(myTrack);
       this.tracks.splice(index , 1);
-      return myTrack; 
-      //Sacar de playlist   
+      return myTrack;   
     }
     else{
       throw new trackDoesNotExistError;

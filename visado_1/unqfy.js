@@ -75,13 +75,16 @@ class UNQfy {
     }
   
   }
+  get playLists(){
+    return this.playlists;
+  }
 
   removeAlbum(artistId, nameAlbum){
     try {
       return this.getArtistById(artistId).removeAlbum(nameAlbum); 
     }
     catch(e){
-      console.log('this album cannot be added because'+e.message);
+      console.log('this album cannot be removed because'+e.message);
     }
   }
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,18 +106,18 @@ class UNQfy {
       return this.getAlbumById(albumId).addtrack(newTrack);
     }
     catch(e){
-      console.log('this album cannot be added because'+e.message);
+      console.log('this track cannot be added because'+e.message);
     } 
     
   }
   removeTrack(albumId, nameTrack){
     
     try {
-      this.playlists.forEach(playlist => playlist.removeTrack(nameTrack))
+      this.playlists.forEach(playlist => playlist.removeTrack(nameTrack));
       return this.getAlbumById(albumId).removeTrack(nameTrack); 
     }
     catch(e){
-      console.log('this album cannot be added because'+e.message);
+      console.log('this track cannot be removed because'+e.message);
     }
   }
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

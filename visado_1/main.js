@@ -91,6 +91,16 @@ function getTracks(){
   console.log(unqfy.getTracks());
   saveUNQfy(unqfy);
 }
+function createPlaylist(name, genresToInclude, maxDuration){
+  const unqfy= getUNQfy();
+  console.log(unqfy.createPlaylist(name,genresToInclude.split(" "),parseInt( maxDuration ,10)));
+  saveUNQfy(unqfy);
+}
+function getPlaylists(){
+  const unqfy= getUNQfy();
+  console.log(unqfy.playLists);
+  saveUNQfy(unqfy);
+}
 
 function main() {
  
@@ -108,8 +118,12 @@ function main() {
     addTrack(process.argv[3],process.argv[4],process.argv[5],process.argv[6]);
   if(process.argv[2]=== 'removeTrack')
     removeTrack(process.argv[3],process.argv[4]);
-    if(process.argv[2]=== 'getTracks')
+  if(process.argv[2]=== 'getTracks')
     getTracks();
+  if(process.argv[2]=== 'createPlaylist')
+    createPlaylist(process.argv[3],process.argv[4],process.argv[5]);
+  if(process.argv[2]=== 'getPlaylists')
+    getPlaylists();
   //process.argv.forEach(argument => console.log(argument));
     
 }
