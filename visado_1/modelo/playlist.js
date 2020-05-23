@@ -1,3 +1,4 @@
+
 module.exports = class PlayList {
   constructor(name, genres, maxDuration,id) {
     this.id =id;
@@ -22,5 +23,13 @@ module.exports = class PlayList {
   }
   hasTrack(track){ 
     return this.tracks.includes(track);
+  }
+  removeTrack(nameTrack){
+    const myTrack =this.tracks.find(t=>t.name === nameTrack);
+    if(myTrack){
+      const index= this.tracks.indexOf(myTrack);
+      this.tracks.splice(index , 1);
+      return myTrack;   
+    }
   }
 }

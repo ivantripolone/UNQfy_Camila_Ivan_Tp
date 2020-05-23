@@ -17,8 +17,10 @@ module.exports = class Album {
   }
   get tracks(){
     return this._tracks;
-}
-
+  }
+  get year(){
+    return this._year;
+  }
   addtrack(track) {
     if(this._tracks.find(t=>t.name === track.name)){
       throw new trackAlreadyExistsError;
@@ -27,14 +29,15 @@ module.exports = class Album {
       this._tracks.push(track);
     }
     
-    return this._tracks.find(t => t._id === track._id);
+    return track;
   }
   removeTrack(nameTrack){
-    const myAlbum =this.tracks.find(t=>t.name === nameTrack);
-    if(myAlbum){
-      const index= this.tracks.indexOf(myAlbum);
+    const myTrack =this.tracks.find(t=>t.name === nameTrack);
+    if(myTrack){
+      const index= this.tracks.indexOf(myTrack);
       this.tracks.splice(index , 1);
-      return myAlbum;   
+      return myTrack; 
+      //Sacar de playlist   
     }
     else{
       throw new trackDoesNotExistError;

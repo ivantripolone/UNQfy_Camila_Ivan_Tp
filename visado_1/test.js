@@ -40,8 +40,8 @@ describe('Add, remove and filter data', () => {
     const artist = createAndAddArtist(unqfy, 'Guns n\' Roses', 'USA');
     const album = createAndAddAlbum(unqfy, artist.id, 'Appetite for Destruction', 1987);
 
-    assert.equal(album._name, 'Appetite for Destruction');
-    assert.equal(album._year, 1987);
+    assert.equal(album.name, 'Appetite for Destruction');
+    assert.equal(album.year, 1987);
     
     
   });
